@@ -12,7 +12,6 @@ namespace RRJConverter.Models
 
         public string GetErrorRespose()
         {
-            //var obj = new ErrorResponseModel();
 
             return JsonSerializer.Serialize(this, new JsonSerializerOptions
             {

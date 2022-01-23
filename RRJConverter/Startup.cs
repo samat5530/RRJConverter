@@ -11,6 +11,7 @@ using RRJConverter.Models;
 using RRJConverter.Services;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -47,9 +48,12 @@ namespace RRJConverter
 
             app.UseRouting();
 
-            app.MapWhen(context => {
-                return !Decimal.TryParse(context.Request.Query["count"], out _) && context.Request.Query.ContainsKey("count");
+            app.MapWhen(context => {      
+                return !Decimal.TryParse(context.Request.Query["count"], NumberStyles.Any, CultureInfo.InvariantCulture, out _);
             }, UncorrectURL);
+
+
+            
 
             app.UseAuthorization();
 
@@ -57,6 +61,7 @@ namespace RRJConverter
             {
                 endpoints.MapControllers();
             });
+
 
             static void UncorrectURL(IApplicationBuilder app)
             {
