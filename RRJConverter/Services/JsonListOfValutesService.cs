@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿//Требуется прикрутить сюда логгер
+//вместо ведения лога исключений
+//на время прикрутил печать в консоль
+
+
+using System;
 using System.Text.Json;
 using System.Net;
 using RRJConverter.Models;
-using Microsoft.AspNetCore.Http;
+
 using System.IO;
 
 namespace RRJConverter.Services
@@ -17,7 +19,6 @@ namespace RRJConverter.Services
         string _address = "https://www.cbr-xml-daily.ru/daily_json.js";
 
 
-        //public string Response {private get; set; }
 
         public ListOfValutes GetListOfValutes()
         {

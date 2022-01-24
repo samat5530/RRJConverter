@@ -10,8 +10,9 @@ namespace RRJConverter.Models
     {
         public string Error { get; set; }
 
-        public string GetErrorRespose()
+        public string GetErrorResponse(string message)
         {
+            this.Error = message;
 
             return JsonSerializer.Serialize(this, new JsonSerializerOptions
             {

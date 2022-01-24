@@ -67,12 +67,8 @@ namespace RRJConverter
             {
                 app.Run(async context =>
                 {
-                    ErrorResponseModel errorResponse = new ErrorResponseModel
-                    {
-                        Error = "Error. Check given data"
-                    };
-                    await context.Response.WriteAsync(errorResponse.GetErrorRespose());
-
+                    ErrorResponseModel errorResponse = new ErrorResponseModel();
+                    await context.Response.WriteAsync(errorResponse.GetErrorResponse("Error. Check given data"));
                 });
             }
         }
