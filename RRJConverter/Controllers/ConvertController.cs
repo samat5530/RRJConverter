@@ -26,9 +26,7 @@ namespace RRJConverter.Controllers
         }
 
      
-
-        //[HttpGet("{toValute}/{count}/{valute}")]
-        public string Get([FromQuery] string valute, [FromQuery] decimal count, [FromQuery] string toValute)
+        public string Get(string valute, decimal count, string toValute)
         {
             var errorResponse = new ErrorResponseModel();
             var myResponse = new ResponseModel();

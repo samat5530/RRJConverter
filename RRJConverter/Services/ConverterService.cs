@@ -8,7 +8,6 @@ namespace RRJConverter.Services
 {
     public class ConverterService
     {
-
         public decimal Convert(decimal firstValue, decimal firstNominal, decimal targetValue, decimal targetNominal, decimal count)
         {
 
@@ -21,7 +20,6 @@ namespace RRJConverter.Services
 
             return result;
         }
-
 
     }
 }
