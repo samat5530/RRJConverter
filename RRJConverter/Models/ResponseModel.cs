@@ -21,7 +21,7 @@ namespace RRJConverter.Models
 
 
 
-        public string GetResponce(string fromValute, string toValute, decimal count, decimal result, DateTime time)
+        public string SendResponse(string fromValute, string toValute, decimal count, decimal result, DateTime time)
         {
             var obj = new ResponseModel {
                 FromValute = fromValute,
