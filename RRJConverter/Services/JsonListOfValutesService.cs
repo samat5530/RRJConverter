@@ -19,10 +19,9 @@ namespace RRJConverter.Services
         string _address = "https://www.cbr-xml-daily.ru/daily_json.js";
 
 
-
         public ListOfValutes GetListOfValutes()
         {
-            if (TryGetDataFromURL(_address))
+            if (TryGetData())
             {
                 using (var stream = _response.GetResponseStream())
                 {
@@ -48,11 +47,11 @@ namespace RRJConverter.Services
 
         }
 
-        public bool TryGetDataFromURL(string url)
+        public bool TryGetData()
         {
             try
             {
-                _request = (HttpWebRequest)WebRequest.Create(url);
+                _request = (HttpWebRequest)WebRequest.Create(_address);
                 _request.Method = "Get";
                 _response = (HttpWebResponse)_request.GetResponse();
                 if (_response.StatusCode == HttpStatusCode.OK)
