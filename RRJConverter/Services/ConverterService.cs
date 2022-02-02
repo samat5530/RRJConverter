@@ -5,7 +5,7 @@ namespace RRJConverter.Services
 {
     public class ConverterService
     {
-
+        //old method
         public decimal Convert(decimal firstValue, decimal firstNominal, decimal targetValue, decimal targetNominal, decimal count)
         {
 
@@ -27,14 +27,14 @@ namespace RRJConverter.Services
                 var item = data.Valute[valute]; 
                 var result = count / item.Nominal;
                 result *= item.Value;
-                return result;
+                return Math.Round(result,4);
             }
             else if (valute == "RUB") //еслиг valute == RUB
             {
                 var item = data.Valute[toValute];
                 var result = item.Nominal / item.Value;
                 result *= count;
-                return result;
+                return Math.Round(result,4);
             }
             else // something -> somethin2 
             {
@@ -46,7 +46,7 @@ namespace RRJConverter.Services
                 var result = item.Nominal / item.Value;
                 result *= temp;   //from RUB0 to y         
 
-                return result;
+                return Math.Round(result,4);
             }
         }
 

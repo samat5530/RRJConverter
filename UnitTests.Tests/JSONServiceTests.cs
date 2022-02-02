@@ -20,6 +20,7 @@ namespace UnitTests.Tests
             Assert.True(result);
 
         }
+
         [Fact]
         public void JsonParsingCompleteTest()
         {

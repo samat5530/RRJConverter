@@ -51,7 +51,7 @@ namespace RRJConverter.Controllers
                         else
                         {
                             var result = Converter.Convert(valuteList, valute, count, toValute);
-                            return new ResponseModel().SendResponse(valute,toValute,count,result, DateTime.Now);
+                            return new ResponseModel().SendResponse(valute, toValute, count, result, DateTime.Now);
                         }
                     }
                 }
