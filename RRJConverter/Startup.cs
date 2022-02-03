@@ -53,9 +53,9 @@ namespace RRJConverter
 
             app.UseRouting();
 
-            app.MapWhen(context => {      
-                return !Decimal.TryParse(context.Request.Query["count"], NumberStyles.Any, CultureInfo.InvariantCulture, out _);
-            }, UncorrectURL);
+            //app.MapWhen(context => {      
+            //    return !Decimal.TryParse(context.Request.Query["count"], NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+            //}, UncorrectURL);
 
 
             

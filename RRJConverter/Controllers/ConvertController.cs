@@ -3,7 +3,7 @@ using RRJConverter.Models;
 using RRJConverter.Models.DatabaseModels;
 using RRJConverter.Services;
 using System;
-
+using System.Threading.Tasks;
 
 namespace RRJConverter.Controllers
 {
@@ -24,7 +24,7 @@ namespace RRJConverter.Controllers
         }
 
      
-        public string Get(string valute, decimal count, string toValute)
+        public async Task<string> GetAsync(string valute, decimal count, string toValute)
         {
             var valuteList = ValutesService.GetListOfValutes(); 
 
@@ -45,14 +45,14 @@ namespace RRJConverter.Controllers
                     {
                         if (valute == toValute) //когда валюты равны (для экономии вычисления).
                         {
-                            AddConvertationToDb(valute, count, toValute, count);
+                            await AddConvertationToDbAsync(valute, count, toValute, count);
                             return new ResponseModel().SendResponse(valute, toValute, count, count, DateTime.Now);
                         }
                         else
                         {
 
                             var result = Converter.Convert(valuteList, valute, count, toValute);
-                            AddConvertationToDb(valute, count, toValute, result);
+                            await AddConvertationToDbAsync(valute, count, toValute, result);
                             return new ResponseModel().SendResponse(valute, toValute, count, result, DateTime.Now);
                         }
                     }
@@ -65,7 +65,7 @@ namespace RRJConverter.Controllers
 
         }
 
-        private void AddConvertationToDb(string fromCurrency, decimal value, string toCurrency, decimal toValue)
+        private async Task AddConvertationToDbAsync(string fromCurrency, decimal value, string toCurrency, decimal toValue)
         {
             var dbUnit = new ConvertingOperation
             {
@@ -76,7 +76,7 @@ namespace RRJConverter.Controllers
                 DateOfConvertation = DateTime.Now
             };
             applicationContext.Add(dbUnit);
-            applicationContext.SaveChanges();
+            await applicationContext.SaveChangesAsync();
         }
     }
 }
