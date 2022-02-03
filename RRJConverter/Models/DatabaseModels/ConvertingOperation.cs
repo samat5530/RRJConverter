@@ -6,9 +6,9 @@ namespace RRJConverter.Models
     {
         public int Id { get; set; }
         public string FromCurrency { get; set; }
-        public int FromCurrencyValue { get; set; }
+        public decimal FromCurrencyValue { get; set; }
         public string ToCurrency { get; set; }
-        public int ToCurrencyValue { get; set; }
+        public decimal ToCurrencyValue { get; set; }
         public DateTime DateOfConvertation { get; set; }
 
     }
