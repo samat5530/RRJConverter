@@ -23,46 +23,39 @@ namespace RRJConverter.Controllers
             applicationContext = context;
         }
 
-     
+
         public async Task<string> GetAsync(string valute, decimal count, string toValute)
         {
-            var valuteList = ValutesService.GetListOfValutes(); 
+            var valuteList = ValutesService.GetListOfValutes();
 
-            if(valuteList != null)
-            {
-                if (valute == null || toValute == null || count < 0)
-                {
-                    return new ErrorResponseModel().GetErrorResponse("One or two of the arguments in the request are bad.");
-                }
-
-                else
-                {
-                    if ((!valuteList.Valute.ContainsKey(valute) && valute != "RUB") || (!valuteList.Valute.ContainsKey(toValute) && toValute != "RUB")) // проверка корректности валют
-                    {
-                        return new ErrorResponseModel().GetErrorResponse("The central bank does not provide data on your currencies. Check if the data is correct");
-                    }
-                    else
-                    {
-                        if (valute == toValute) //когда валюты равны (для экономии вычисления).
-                        {
-                            await AddConvertationToDbAsync(valute, count, toValute, count);
-                            return new ResponseModel().SendResponse(valute, toValute, count, count, DateTime.Now);
-                        }
-                        else
-                        {
-
-                            var result = Converter.Convert(valuteList, valute, count, toValute);
-                            await AddConvertationToDbAsync(valute, count, toValute, result);
-                            return new ResponseModel().SendResponse(valute, toValute, count, result, DateTime.Now);
-                        }
-                    }
-                }
-            }
-            else
+            if (valuteList == null) 
             {
                 return new ErrorResponseModel().GetErrorResponse("Internal Error. Try later");
             }
 
+            if (valute == null || toValute == null || count < 0)
+            {
+                return new ErrorResponseModel().GetErrorResponse("One or two of the arguments in the request are bad.");
+            }
+
+            // проверка корректности валют
+            if ((!valuteList.Valute.ContainsKey(valute) && valute != "RUB")
+                || (!valuteList.Valute.ContainsKey(toValute) && toValute != "RUB")) 
+            {
+                return new ErrorResponseModel()
+                    .GetErrorResponse("The central bank does not provide data on your currencies. Check if the data is correct");
+            }
+
+            //когда валюты равны (для экономии вычисления).
+            if (valute == toValute) 
+            {
+                await AddConvertationToDbAsync(valute, count, toValute, count);
+                return new ResponseModel().SendResponse(valute, toValute, count, count, DateTime.Now);
+            }
+
+            var result = Converter.Convert(valuteList, valute, count, toValute);
+            await AddConvertationToDbAsync(valute, count, toValute, result);
+            return new ResponseModel().SendResponse(valute, toValute, count, result, DateTime.Now);
         }
 
         private async Task AddConvertationToDbAsync(string fromCurrency, decimal value, string toCurrency, decimal toValue)

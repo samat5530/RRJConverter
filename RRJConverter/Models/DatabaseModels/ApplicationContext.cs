@@ -9,7 +9,6 @@ namespace RRJConverter.Models.DatabaseModels
             : base(options)
         {
             Database.EnsureCreated();
-        }
-  
+        }  
     }
 }
