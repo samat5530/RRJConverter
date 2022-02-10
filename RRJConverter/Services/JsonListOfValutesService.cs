@@ -14,7 +14,7 @@ namespace RRJConverter.Services
 {
     public class JsonListOfValutesService
     {
-        HttpWebRequest _request;
+ 
         HttpWebResponse _response;
         string _address = "https://www.cbr-xml-daily.ru/daily_json.js";
 
@@ -40,10 +40,7 @@ namespace RRJConverter.Services
                     }
                 }
             }
-            else
-            {
-                return null;
-            }
+            return null;
 
         }
 
@@ -51,9 +48,9 @@ namespace RRJConverter.Services
         {
             try
             {
-                _request = (HttpWebRequest)WebRequest.Create(_address);
-                _request.Method = "Get";
-                _response = (HttpWebResponse)_request.GetResponse();
+                var request = (HttpWebRequest)WebRequest.Create(_address);
+                request.Method = "Get";
+                _response = (HttpWebResponse)request.GetResponse();
                 if (_response.StatusCode == HttpStatusCode.OK)
                     //имеет сюда прикрутить логгирование
                     Console.WriteLine("\r\nResponse Status Code is OK and StatusDescription is: {0}",
