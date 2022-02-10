@@ -21,9 +21,9 @@ namespace RRJConverter.Models
 
 
 
-        public string SendResponse(string fromValute, string toValute, decimal count, decimal result, DateTime time)
+        public string GetResponse(string fromValute, string toValute, decimal count, decimal result, DateTime time)
         {
-            var obj = new ResponseModel {
+            var response = new ResponseModel {
                 FromValute = fromValute,
                 ToValute = toValute,
                 Count = count,
@@ -31,8 +31,8 @@ namespace RRJConverter.Models
                 ConvertationTime = time,                          
             };
 
-            return JsonSerializer.Serialize<ResponseModel>(obj, new JsonSerializerOptions() { 
-                PropertyNameCaseInsensitive = true, });
+            return JsonSerializer.Serialize<ResponseModel>(response, new JsonSerializerOptions() { 
+                PropertyNameCaseInsensitive = true});
         }
 
     }

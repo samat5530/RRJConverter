@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RRJConverter.Models;
 using RRJConverter.Models.DatabaseModels;
 using RRJConverter.Services;
@@ -11,64 +12,57 @@ namespace RRJConverter.Controllers
     [ApiController]
     public class ConvertController : ControllerBase
     {
-        public JsonListOfValutesService ValutesService { get; set; }
+        
+        /// <summary>
+        /// Хранит методы конвертации валют, определённые в сервисе ConverterService
+        /// </summary>
+        private readonly ConverterService _valuteConverter;
 
-        public ConverterService Converter { get; set; }
+        /// <summary>
+        ///  Хранит контекст базы данных, предоставленной EF в сервисе ApplicationContext
+        /// </summary>
         public ApplicationContext applicationContext { get; set; }
 
-        public ConvertController(JsonListOfValutesService jsonListOfValutesService, ConverterService converter, ApplicationContext context)
+        public ConvertController(ConverterService converter, ApplicationContext context)
         {
-            ValutesService = jsonListOfValutesService;
-            Converter = converter;
+            _valuteConverter = converter;
             applicationContext = context;
         }
 
-
-        public async Task<string> GetAsync(string valute, decimal count, string toValute)
+        /// <summary>
+        /// Возвращает запрос по адресу /api/Convert/?{query} <br />
+        /// {query} должен состоять из трёх параметров данного метода
+        /// </summary>
+        /// <param name="valute">Представляет валюту, из которой требуется конвертация</param>
+        /// <param name="count">Представляет количественное значение валюты, из которой требуется выполнить конвертацию</param>
+        /// <param name="toValute">Представляет валюту, в которую требуется выполнить конвертирование</param>
+        /// <returns>Возвращает JSON-объект клиенту с данными о конвертации</returns>
+        public async Task<string> Get(string valute, decimal count, string toValute)
         {
-            var valuteList = ValutesService.GetListOfValutes();
-
-            if (valuteList == null) 
-            {
-                return new ErrorResponseModel().GetErrorResponse("Internal Error. Try later");
-            }
-
-            if (valute == null || toValute == null || count < 0)
-            {
-                return new ErrorResponseModel().GetErrorResponse("One or two of the arguments in the request are bad.");
-            }
-
-            // проверка корректности валют
-            if ((!valuteList.Valute.ContainsKey(valute) && valute != "RUB")
-                || (!valuteList.Valute.ContainsKey(toValute) && toValute != "RUB")) 
-            {
-                return new ErrorResponseModel()
-                    .GetErrorResponse("The central bank does not provide data on your currencies. Check if the data is correct");
-            }
-
-            //когда валюты равны (для экономии вычисления).
-            if (valute == toValute) 
-            {
-                await AddConvertationToDbAsync(valute, count, toValute, count);
-                return new ResponseModel().SendResponse(valute, toValute, count, count, DateTime.Now);
-            }
-
-            var result = Converter.Convert(valuteList, valute, count, toValute);
+            var result = _valuteConverter.Convert(valute, count, toValute);
             await AddConvertationToDbAsync(valute, count, toValute, result);
-            return new ResponseModel().SendResponse(valute, toValute, count, result, DateTime.Now);
+            return new ResponseModel().GetResponse(valute, toValute, count, result, DateTime.Now);
         }
 
+        /// <summary>
+        /// Непубличный метод, выполняет сохранение операции конвертации в базу данных
+        /// </summary>
+        /// <param name="fromCurrency">Представляет валюту, из которой требуется конвертация</param>
+        /// <param name="value">Представляет количественное значение валюты, из которой требуется выполнить конвертацию</param>
+        /// <param name="toCurrency">Представляет валюту, в которую требуется выполнить конвертирование</param>
+        /// <param name="toValue">Представляет итоговое найденное количественное значение требуемой валюты</param>
+        /// <returns>Выполняет сохранение изменений в базу данных</returns>
         private async Task AddConvertationToDbAsync(string fromCurrency, decimal value, string toCurrency, decimal toValue)
         {
-            var dbUnit = new ConvertingOperation
+            var convertingOperation = new ConvertingOperation
             {
                 FromCurrency = fromCurrency,
                 FromCurrencyValue = value,
                 ToCurrency = toCurrency,
                 ToCurrencyValue = toValue,
-                DateOfConvertation = DateTime.Now
+                CreatedOn = DateTime.UtcNow
             };
-            applicationContext.Add(dbUnit);
+            await applicationContext.AddAsync(convertingOperation);
             await applicationContext.SaveChangesAsync();
         }
     }

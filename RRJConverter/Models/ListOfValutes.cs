@@ -17,7 +17,7 @@ namespace RRJConverter.Models
 
         public DateTime Timestamp { get; set; }
 
-        public Dictionary<string, ValuteObj> Valute { set; get; }
+        public Dictionary<string, ValuteModel> Valute { set; get; }
 
         public override string ToString() => JsonSerializer.Serialize(this);
         

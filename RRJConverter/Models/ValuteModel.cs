@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RRJConverter.Models
 {
-    public class ValuteObj
+    public class ValuteModel
     {
         public string ID { get; set; }
 
