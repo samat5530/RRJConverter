@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RRJConverter.Middlewares;
 using RRJConverter.Models;
 using RRJConverter.Models.DatabaseModels;
 using RRJConverter.Services;
@@ -16,10 +17,10 @@ namespace RRJConverter
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private readonly IConfiguration configuration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -27,9 +28,11 @@ namespace RRJConverter
             services.AddControllers();
             services.AddTransient<JsonListOfValutesService>();
             services.AddTransient<ConverterService>();
-            string connection = Configuration.GetConnectionString("DefaultConnection");
+            string connection = configuration.GetConnectionString("LocalDBConnection");
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connection));
+            services.AddHttpClient<JsonListOfValutesService>();
+            services.AddTransient<ExceptionHandlingMiddleware>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,31 +43,16 @@ namespace RRJConverter
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+
             app.UseHttpsRedirection();
 
-            
-
             app.UseRouting();
-
-            //app.MapWhen(context => {      
-            //    return !Decimal.TryParse(context.Request.Query["count"], NumberStyles.Any, CultureInfo.InvariantCulture, out _);
-            //}, UncorrectURL);
-
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-
-
-            static void UncorrectURL(IApplicationBuilder app)
-            {
-                app.Run(async context =>
-                {
-                    ErrorResponseModel errorResponse = new ErrorResponseModel();
-                    await context.Response.WriteAsync(errorResponse.GetErrorResponse("Error. Check given data"));
-                });
-            }
         }
     }
 }

@@ -30,7 +30,7 @@ namespace RRJConverter.Controllers
         }
 
         /// <summary>
-        /// Возвращает запрос по адресу /api/Convert/?{query} <br />
+        /// Возвращает ответ в виде JSON-объекта на запрос по адресу /api/Convert/?{query} <br />
         /// {query} должен состоять из трёх параметров данного метода
         /// </summary>
         /// <param name="valute">Представляет валюту, из которой требуется конвертация</param>
