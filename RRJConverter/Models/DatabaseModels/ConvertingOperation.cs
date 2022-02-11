@@ -12,23 +12,24 @@ namespace RRJConverter.Models
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Представляет валюту из которой проводилась конвертация
+        /// Валюта из которой проводилась конвертация
         /// </summary>
         public string FromCurrency { get; set; }
         /// <summary>
-        /// Представляет количественное значение конвертируемой валюты
+        /// Количественное значение конвертируемой валюты
         /// </summary>
         public decimal FromCurrencyValue { get; set; }
         /// <summary>
-        /// Представляет валюту в которую проводилась конвертация
+        /// Валюта в которую проводилась конвертация
         /// </summary>
         public string ToCurrency { get; set; }
         /// <summary>
-        /// Представляет требуемое количественное значение валюты в которую проводилась конвертация
+        /// Требуемое количественное значение валюты в которую проводилась конвертация
         /// </summary>
         public decimal ToCurrencyValue { get; set; }
+        
         /// <summary>
-        /// Представляет дату заведения операции в базу данных
+        /// Дата заведения операции в базу данных
         /// </summary>
         public DateTime CreatedOn { get; set; }
 
