@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "LocalDBConnection": "Server=(localdb)\\mssqllocaldb;Database=rrjconvertdb;Trusted_Connection=True;"
+  }
+}

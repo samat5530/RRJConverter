@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace RRJConverter.Models
+namespace RRJConverter.Domain.Models
 {
-    /// <summary>
-    /// Представляет из себя объектную модель результата операции конвертации.
-    /// </summary>
-    public class ConvertingOperation
+    public class DomainConvertingOperationModel
     {
         /// <summary>
         /// Уникальный идентификатор. Требуется для уникализации данных объектов в базе данных
@@ -27,11 +26,10 @@ namespace RRJConverter.Models
         /// Требуемое количественное значение валюты в которую проводилась конвертация
         /// </summary>
         public decimal ToCurrencyValue { get; set; }
-        
+
         /// <summary>
         /// Дата заведения операции в базу данных
         /// </summary>
         public DateTime CreatedOn { get; set; }
-
     }
 }

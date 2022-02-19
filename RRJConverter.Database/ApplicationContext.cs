@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RRJConverter.Domain.Models;
 
-namespace RRJConverter.Models.DatabaseModels
+namespace RRJConverter.Database
 {
     public class ApplicationContext : DbContext
     {
         /// <summary>
         /// Представляет набор объектов, которые хранятся в базе данных
         /// </summary>
-        public DbSet<ConvertingOperation> ConvertingOperations { get; set; }
+        public DbSet<DomainConvertingOperationModel> ConvertingOperations { get; set; }
 
         /// <summary>
         /// Конструктор класса контекста базы данных
