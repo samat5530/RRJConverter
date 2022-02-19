@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace RRJConverter.Domain
 {
-    interface IJsonApiCurrenciesService
+    public interface IJsonApiCurrenciesService
     {
-        public Task<DomainCurrencyModel> GetListOfCurrenciesAsync();
+        public Task<IEnumerable<DomainCurrencyModel>> GetListOfCurrenciesAsync();
     }
 }

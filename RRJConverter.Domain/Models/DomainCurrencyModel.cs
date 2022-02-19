@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RRJConverter.Domain
 {
-    class DomainCurrencyModel
+    public class DomainCurrencyModel
     {
         /// <summary>
         /// Первая валюта
