@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace RRJConverter.Database
 {
-    public class ConvertingRepository : IRepository
+    public class ConvertingOperationsRepository : IRepository
     {
         private ApplicationContext _applicationContext;
 
-        public ConvertingRepository(ApplicationContext context)
+        public ConvertingOperationsRepository(ApplicationContext context)
         {
             _applicationContext = context;
         }

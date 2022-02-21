@@ -1,99 +1,83 @@
 ﻿using RRJConverter.Models;
 using System;
+using RRJConverter.Domain;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
+using RRJConverter.Domain.Models;
 
 namespace RRJConverter.Services
 {
-    public class ConverterService
+    public class ConverterService : ICurrencyConverter
     {
         /// <summary>
-        /// Переменная, хранящая объект модели валют, предоставленная сторонним API
+        /// Переменная, хранящая коллекцию IEnumerable объектов доменной модели валют, предоставленная сторонним API
         /// </summary>
-        private readonly JsonListOfValutesService _jsonListOfValutesService;
+        private readonly IJsonApiCurrenciesService _currencies;
 
-        public ConverterService(JsonListOfValutesService jsonListOfValutesService)
+        public ConverterService(IJsonApiCurrenciesService jsonApiCurrenciesService)
         {
-            _jsonListOfValutesService = jsonListOfValutesService;
+            _currencies = jsonApiCurrenciesService;
         }
 
         //ListOfValutes data 
-        public decimal Convert(string valute, decimal count, string toValute)
-        {      
-            var valutes = _jsonListOfValutesService.GetListOfValutesAsync().Result;
+        public async Task<decimal> ConvertAsync(string fromCurrency, decimal count, string toCurrency)
+        {
+            var currencyCollection = (await _currencies.GetListOfCurrenciesAsync()).ToList();
             
-            if (valutes == null) 
+            if (currencyCollection == null) 
             {
-                throw new Exception("The Central bank JSON-Api returns no data");
-                //return new ErrorResponseModel().GetErrorResponse("Internal Error. Try later");
+                throw new Exception("The Central bank's JSON-Api returns no data");
             }
 
-            if (valute == null || toValute == null || count < 0)
+            if (fromCurrency == null || toCurrency == null || count < 0)
             {
                 throw new Exception("One or two of the arguments are bad");
-                //return new ErrorResponseModel().GetErrorResponse("One or two of the arguments in the request are bad.");
             }
 
-
             // проверка корректности валют
-            if ((!valutes.Valute.ContainsKey(valute) && valute != "RUB")
-                || (!valutes.Valute.ContainsKey(toValute) && toValute != "RUB")) 
+
+            if (!_currencies.IsCurrencyExistInList(currencyCollection, fromCurrency)
+                || !_currencies.IsCurrencyExistInList(currencyCollection, fromCurrency))
             {
-                throw new Exception("The central bank does not provide data on your currencies. Check if the data is correct");
-                //return new ErrorResponseModel()
-                //   .GetErrorResponse("The central bank does not provide data on your currencies. Check if the data is correct");
+                throw new Exception("The central bank does not provide data on your currencies. Check if the data is correct"); 
             }
 
             //когда валюты равны 
-            if (valute == toValute) 
+            if (fromCurrency == toCurrency) 
             {
                 return count;
             }
 
-            if (toValute == "RUB") // если toValute == RUB
+            if (fromCurrency == "RUB") //конвертация из рубля
             {
-                return toValuteIsRUB(valutes, valute, count);
+                return convertingFromRUB(toCurrency, count, currencyCollection);
             }
-            if (valute == "RUB") //еслиг valute == RUB
+
+            if (toCurrency == "RUB") // если toValute == RUB
             {
-                return valuteIsRUB(valutes, count, toValute);
+                return convertingToRUB(fromCurrency, count, currencyCollection);
             }
+
             // something -> somethin2 
 
-            var item = valutes.Valute[toValute];
-            var temp = count / valutes.Valute[valute].Nominal;
-            temp *= valutes.Valute[valute].Value;  //from x to RUB
-            var result = item.Nominal / item.Value;
-            result *= temp;   //from RUB to y         
+            var fromCurrencyToRUBValue = convertingToRUB(fromCurrency, count, currencyCollection);
+            var result = convertingFromRUB(toCurrency, fromCurrencyToRUBValue, currencyCollection);
+       
             return Math.Round(result, 4);
         }
 
-        /// <summary>
-        /// Конвертация из рубля в другую валюту
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="count"></param>
-        /// <param name="toValute"></param>
-        /// <returns></returns>
-        private decimal valuteIsRUB(ListOfValutes data, decimal count, string toValute)
+        private static decimal convertingToRUB(string fromCurrency, decimal count, List<DomainCurrenciesPairModel> currencyCollection)
         {
-            var item = data.Valute[toValute];
-            var result = item.Nominal / item.Value;
-            result *= count;
-            return Math.Round(result, 4);
+            
+            var pair = currencyCollection.Find(x => x.SecondCurrency == fromCurrency);
+            return Math.Round(pair.Rate * count, 4);
         }
-        /// <summary>
-        /// Конвертация из другой валюты в рубль
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="valute"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        
-        private decimal toValuteIsRUB(ListOfValutes data, string valute, decimal count)
+
+        private static decimal convertingFromRUB(string toCurrency, decimal count,  List<DomainCurrenciesPairModel> currencyCollection)
         {
-            var item = data.Valute[valute];
-            var result = count / item.Nominal;
-            result *= item.Value;
-            return Math.Round(result, 4);
+            var pair = currencyCollection.Find(x => x.SecondCurrency == toCurrency);
+            return Math.Round((1 / pair.Rate) * count, 4);
         }
     }
 }

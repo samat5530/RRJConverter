@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RRJConverter.Domain;
-using RRJConverter.Integrations.Services;
 
-namespace RRJConverter.Integrations
+namespace RRJConverter.Integrations.Services
 {
     public static class ServiceCollectionExtensions
     {
@@ -14,7 +13,8 @@ namespace RRJConverter.Integrations
         public static IServiceCollection AddIntegrationServices(
             this IServiceCollection services)
         {
-            services.AddTransient<IJsonApiCurrenciesService, JsonListOfCurrenciesService>();        
+            services.AddTransient<IJsonApiCurrenciesService, JsonListOfCurrenciesService>();
+            services.AddHttpClient<JsonListOfCurrenciesService>();
             return services;
         }
     }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RRJConverter.Domain;
 using RRJConverter.Models;
-using RRJConverter.Models.DatabaseModels;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,13 +11,13 @@ namespace RRJConverter.Controllers
     public class OperationsController : ControllerBase
     {
         /// <summary>
-        /// Хранит контект данных базы данных
+        /// Хранит репозиторий для работы с базой данных
         /// </summary>
-        public ApplicationContext ApplicationContext { get; set; }
+        private readonly IRepository _repository;
 
-        public OperationsController(ApplicationContext context)
+        public OperationsController(IRepository repository)
         {
-            ApplicationContext = context;
+            _repository = repository;
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace RRJConverter.Controllers
         /// <param name="id">Представляет собой уникальный идентификатор</param>
         /// <returns>Возращает клиенту статус-код 200 и JSON-данные с данными операции по идентификатору. 
         /// Если данные не были найдены клиенту возврается статус-код 404</returns>
-        [HttpGet]
+        /*[HttpGet]
         public async Task<IActionResult> Get(int id)
         {
             var item = await ApplicationContext.ConvertingOperations.FindAsync(id);
@@ -36,6 +36,6 @@ namespace RRJConverter.Controllers
                 return NotFound();
             }
             return Ok(item);   
-        }
+        }*/
     }
 }
