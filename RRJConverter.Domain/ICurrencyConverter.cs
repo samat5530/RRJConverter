@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RRJConverter.Domain
 {
-    interface ICurrencyConverter
+    public interface ICurrencyConverter
     {
-        public decimal Convert(decimal count, decimal rate);
+        public Task<decimal> ConvertAsync(string firstCurrency, decimal count, string secondCurrency);
     }
 }

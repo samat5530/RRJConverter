@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RRJConverter", "RRJConverter\RRJConverter.csproj", "{AA7CA984-E1E8-4470-8300-D1EAC80DB275}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F637128B-9565-41D8-9629-AAC1FF9F381B} = {F637128B-9565-41D8-9629-AAC1FF9F381B}
+		{2BF2EDA5-309F-4977-BC49-C9EB41367680} = {2BF2EDA5-309F-4977-BC49-C9EB41367680}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests.Tests", "UnitTests.Tests\UnitTests.Tests.csproj", "{7B2635D3-6E0D-4914-9423-423EED04159D}"
 EndProject
@@ -11,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RRJConverter.Domain", "RRJC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RRJConverter.Integrations", "RRJConverter.Integrations\RRJConverter.Integrations.csproj", "{B355AF0C-8F3B-4306-A727-D27922C199DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RRJConverter.Database", "RRJConverter.Database\RRJConverter.Database.csproj", "{2BF2EDA5-309F-4977-BC49-C9EB41367680}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RRJConverter.Database", "RRJConverter.Database\RRJConverter.Database.csproj", "{2BF2EDA5-309F-4977-BC49-C9EB41367680}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RRJConverter.Domain
+namespace RRJConverter.Domain.Models
 {
-    public class DomainCurrencyModel
+    public class DomainCurrenciesPairModel
     {
         /// <summary>
         /// Первая валюта

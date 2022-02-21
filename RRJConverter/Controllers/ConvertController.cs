@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RRJConverter.Domain;
+using RRJConverter.Domain.Models;
 using RRJConverter.Models;
-using RRJConverter.Models.DatabaseModels;
 using RRJConverter.Services;
 using System;
 using System.Threading.Tasks;
@@ -16,17 +17,17 @@ namespace RRJConverter.Controllers
         /// <summary>
         /// Хранит методы конвертации валют, определённые в сервисе ConverterService
         /// </summary>
-        private readonly ConverterService _valuteConverter;
+        private readonly ICurrencyConverter _valuteConverter;
 
         /// <summary>
-        ///  Хранит контекст базы данных, предоставленной EF в сервисе ApplicationContext
+        /// Репозиторий, для работы с БД
         /// </summary>
-        public ApplicationContext applicationContext { get; set; }
+        private readonly IRepository _repository;
 
-        public ConvertController(ConverterService converter, ApplicationContext context)
+        public ConvertController(ICurrencyConverter converter, IRepository repository)
         {
             _valuteConverter = converter;
-            applicationContext = context;
+            _repository = repository;
         }
 
         /// <summary>
@@ -37,11 +38,19 @@ namespace RRJConverter.Controllers
         /// <param name="count">Представляет количественное значение валюты, из которой требуется выполнить конвертацию</param>
         /// <param name="toValute">Представляет валюту, в которую требуется выполнить конвертирование</param>
         /// <returns>Возвращает JSON-объект клиенту с данными о конвертации</returns>
-        public async Task<string> Get(string valute, decimal count, string toValute)
+        public async Task<ResponseModel> Get(string valute, decimal count, string toValute)
         {
-            var result = _valuteConverter.Convert(valute, count, toValute);
-            await AddConvertationToDbAsync(valute, count, toValute, result);
-            return new ResponseModel().GetResponse(valute, toValute, count, result, DateTime.Now);
+            var resultOfConverting = await _valuteConverter.ConvertAsync(valute, count, toValute);
+            AddConvertationToDb(valute, count, toValute, resultOfConverting);
+            var response = new ResponseModel
+            {
+                FromValute = valute,
+                ToValute = toValute,
+                Count = count,
+                Result = resultOfConverting,
+                ConvertationTime = DateTime.UtcNow
+            };
+            return response;
         }
 
         /// <summary>
@@ -52,9 +61,9 @@ namespace RRJConverter.Controllers
         /// <param name="toCurrency">Представляет валюту, в которую требуется выполнить конвертирование</param>
         /// <param name="toValue">Представляет итоговое найденное количественное значение требуемой валюты</param>
         /// <returns>Выполняет сохранение изменений в базу данных</returns>
-        private async Task AddConvertationToDbAsync(string fromCurrency, decimal value, string toCurrency, decimal toValue)
+        private void AddConvertationToDb(string fromCurrency, decimal value, string toCurrency, decimal toValue)
         {
-            var convertingOperation = new ConvertingOperation
+            var operation = new DomainConvertingOperationModel
             {
                 FromCurrency = fromCurrency,
                 FromCurrencyValue = value,
@@ -62,8 +71,9 @@ namespace RRJConverter.Controllers
                 ToCurrencyValue = toValue,
                 CreatedOn = DateTime.UtcNow
             };
-            await applicationContext.AddAsync(convertingOperation);
-            await applicationContext.SaveChangesAsync();
+
+            _repository.Create(operation);
+            _repository.Save();
         }
     }
 }
