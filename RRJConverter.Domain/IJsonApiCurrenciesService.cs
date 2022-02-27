@@ -9,6 +9,5 @@ namespace RRJConverter.Domain
     public interface IJsonApiCurrenciesService
     {
         public Task<IEnumerable<DomainCurrenciesPairModel>> GetListOfCurrenciesAsync();
-        public bool IsCurrencyExistInList(IEnumerable<DomainCurrenciesPairModel> collection, string currency);
     }
 }

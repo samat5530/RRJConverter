@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RRJConverter.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,5 +9,6 @@ namespace RRJConverter.Domain
     public interface ICurrencyConverter
     {
         public Task<decimal> ConvertAsync(string firstCurrency, decimal count, string secondCurrency);
+        public bool IsCurrencyExistInList(IEnumerable<DomainCurrenciesPairModel> collection, string currency);
     }
 }
