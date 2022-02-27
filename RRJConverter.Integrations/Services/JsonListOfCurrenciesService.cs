@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using RRJConverter.Domain;
 using RRJConverter.Domain.Models;
+using RRJConverter.Integrations.Models;
 using RRJConverter.Models;
 using System;
 using System.Collections.Generic;
@@ -49,28 +50,48 @@ namespace RRJConverter.Integrations.Services
                 _logger.LogInformation($"Response data: {responseString}");
                 var currenciesFromApi = JsonSerializer.Deserialize<Currencies>(responseString,
                             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-                /*Приведение объектов модели интеграции к модели домена,
-                Так как центробанк возвращает валюты в виде отношения к рублю
-                логика поиска валют, конвертирования будет выстроена вокруг модели в виде пар отношений
-                RUB->OTHERCURRENCY
-                */
+                
+                //Приведение объектов модели интеграции к модели домена, приведение всех пар в виде модели домена
                 var result = new List<DomainCurrenciesPairModel>();
                 foreach (var currency in currenciesFromApi.Valute)
-                {
-                    result.Add(new DomainCurrenciesPairModel
+                {   
+                    // X-X пара              
+                    foreach (var otherCurrency in currenciesFromApi.Valute)
                     {
-                        FirstCurrency = "RUB",
-                        SecondCurrency = currency.Value.CharCode,
-                        Rate = currency.Value.Value / currency.Value.Nominal
-                    });
-                    result.Add(new DomainCurrenciesPairModel
-                    {
-                        FirstCurrency = "RUB",
-                        SecondCurrency = "RUB",
-                        Rate = 1
-                    });
+                        if (currency.Value.CharCode == otherCurrency.Value.CharCode)
+                        {
+                            result.Add(new DomainCurrenciesPairModel
+                            {
+                                FirstCurrency = currency.Value.CharCode,
+                                SecondCurrency = otherCurrency.Value.CharCode,
+                                Rate = 1,
+                            });
+                        }
+                        else
+                        {
+                            result.Add(new DomainCurrenciesPairModel
+                            {
+                                FirstCurrency = currency.Value.CharCode,
+                                SecondCurrency = otherCurrency.Value.CharCode,
+                                Rate = (currency.Value.Value / currency.Value.Nominal) * (otherCurrency.Value.Nominal / otherCurrency.Value.Value)
+                            });
+                        }
+                    }
+
+                    //X-RUB пара
+                    AddCurrencyToRubPair(result, currency);
+                    //RUB-X пара
+                    AddRubToCurrencyPair(result, currency);
                 }
+
+                //RUB-RUB пара
+                result.Add(new DomainCurrenciesPairModel
+                {
+                    FirstCurrency = "RUB",
+                    SecondCurrency = "RUB",
+                    Rate = 1
+                });
+
                 return result;
             }
             catch (Exception ex)
@@ -80,22 +101,24 @@ namespace RRJConverter.Integrations.Services
             }
         }
 
-        /// <summary>
-        /// Проверка наличия валюты в коллекции IEnumerable, состоящей из объектов DomainCurrenciesPairModel
-        /// </summary>
-        /// <param name="collection">Коллекция IEnumerable, состоящей из объектов DomainCurrenciesPairModel</param>
-        /// <param name="currency">Строковый трёхбуквенный код валюты</param>
-        /// <returns></returns>
-        public bool IsCurrencyExistInList(IEnumerable<DomainCurrenciesPairModel> collection, string currency)
+        private static void AddRubToCurrencyPair(List<DomainCurrenciesPairModel> result, KeyValuePair<string, CurrencyIntegrationModel> currency)
         {
-            var collectionOfPairs = collection.ToList();
-            bool chekingOperation = collectionOfPairs.Exists(pair => pair.SecondCurrency == currency);
-            
-            if (chekingOperation)
+            result.Add(new DomainCurrenciesPairModel
             {
-                return true;
-            }         
-            return false;
+                FirstCurrency = currency.Value.CharCode,
+                SecondCurrency = "RUB",
+                Rate = currency.Value.Value / currency.Value.Nominal
+            });
+        }
+
+        private static void AddCurrencyToRubPair(List<DomainCurrenciesPairModel> result, KeyValuePair<string, CurrencyIntegrationModel> currency)
+        {
+            result.Add(new DomainCurrenciesPairModel
+            {
+                FirstCurrency = "RUB",
+                SecondCurrency = currency.Value.CharCode,
+                Rate = currency.Value.Nominal / currency.Value.Value
+            });
         }
 
     }

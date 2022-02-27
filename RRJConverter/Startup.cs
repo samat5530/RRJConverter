@@ -4,12 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
 using RRJConverter.Database.Services;
 using RRJConverter.Domain;
+using RRJConverter.Domain.Services;
 using RRJConverter.Integrations.Services;
 using RRJConverter.Middlewares;
-using RRJConverter.Services;
 
 
 namespace RRJConverter
@@ -29,7 +28,7 @@ namespace RRJConverter
             services.AddControllers();
             services.AddIntegrationServices();
             services.AddDatabaseServices(configuration);
-            services.AddTransient<ICurrencyConverter, ConverterService>();
+            services.AddDomainServices();
             //services.AddTransient<ExceptionHandlingMiddleware>();
         }
 
