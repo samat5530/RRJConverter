@@ -12,15 +12,8 @@ namespace RRJConverter.Controllers
     [ApiController]
     public class ConvertController : ControllerBase
     {
-        
-        /// <summary>
-        /// Хранит методы конвертации валют, определённые в сервисе ConverterService
-        /// </summary>
-        private readonly ICurrencyConverter _valuteConverter;
 
-        /// <summary>
-        /// Репозиторий, для работы с БД
-        /// </summary>
+        private readonly ICurrencyConverter _valuteConverter;
         private readonly IRepository _repository;
 
         public ConvertController(ICurrencyConverter converter, IRepository repository)
@@ -59,7 +52,6 @@ namespace RRJConverter.Controllers
         /// <param name="value">Представляет количественное значение валюты, из которой требуется выполнить конвертацию</param>
         /// <param name="toCurrency">Представляет валюту, в которую требуется выполнить конвертирование</param>
         /// <param name="toValue">Представляет итоговое найденное количественное значение требуемой валюты</param>
-        /// <returns>Выполняет сохранение изменений в базу данных</returns>
         private void AddConvertationToDb(string fromCurrency, decimal value, string toCurrency, decimal toValue)
         {
             var operation = new DomainConvertingOperationModel
