@@ -11,7 +11,7 @@ namespace RRJConverter.Database
 {
     public class ConvertingOperationsRepository : IRepository
     {
-        private ApplicationContext _applicationContext;
+        private readonly ApplicationContext _applicationContext;
 
         public ConvertingOperationsRepository(ApplicationContext context)
         {
@@ -32,12 +32,12 @@ namespace RRJConverter.Database
             }
         }
 
-        public DomainConvertingOperationModel GetBook(int id)
+        public DomainConvertingOperationModel GetOperation(int id)
         {
             return _applicationContext.ConvertingOperations.Find(id);
         }
 
-        public IEnumerable<DomainConvertingOperationModel> GetBookList()
+        public IEnumerable<DomainConvertingOperationModel> GetOperationList()
         {
             return _applicationContext.ConvertingOperations;
         }

@@ -5,7 +5,11 @@ using System.Text.Json;
 
 namespace RRJConverter.Models
 {
-    public class Currencies
+
+    /// <summary>
+    /// Валютная модель интеграции 
+    /// </summary>
+    public class BankDataModel
     {
         /// <summary>
         /// Дата текущего курса (сторонний API)
@@ -15,7 +19,7 @@ namespace RRJConverter.Models
         /// <summary>
         /// Предыдущая дата курса (не требуется)(сторонний API)
         /// </summary>
-        public DateTime PreviousDate {get; set;}
+        public DateTime PreviousDate { get; set; }
 
         /// <summary>
         /// Ссылка на архивные данные (не требуется)(сторонний API)
@@ -37,6 +41,6 @@ namespace RRJConverter.Models
         /// </summary>
         /// <returns>Возвращает строку в формате JSON.</returns>
         public override string ToString() => JsonSerializer.Serialize(this);
-        
+
     }
 }
