@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace RRJConverter.Integrations.Services
 {
-    class JsonListOfCurrenciesService : IJsonApiCurrenciesService
+    public class JsonListOfCurrenciesService : IJsonApiCurrenciesService
     {
 
         private readonly ILogger<JsonListOfCurrenciesService> _logger;

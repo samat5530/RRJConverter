@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RRJConverter.Domain;
 using RRJConverter.Models;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,9 +11,6 @@ namespace RRJConverter.Controllers
     [ApiController]
     public class OperationsController : ControllerBase
     {
-        /// <summary>
-        /// Хранит репозиторий для работы с базой данных
-        /// </summary>
         private readonly IRepository _repository;
 
         public OperationsController(IRepository repository)
@@ -21,21 +19,21 @@ namespace RRJConverter.Controllers
         }
 
         /// <summary>
-        /// Возвращает данные о конвертации по уникальному идентификатору по запросу /api/GetArchiveOperations/?{id}
+        /// Возвращает данные о конвертации по уникальному идентификатору по запросу /api/Operations/?{id}
         /// </summary>
         /// <param name="id">Представляет собой уникальный идентификатор</param>
         /// <returns>Возращает клиенту статус-код 200 и JSON-данные с данными операции по идентификатору. 
         /// Если данные не были найдены клиенту возврается статус-код 404</returns>
-        /*[HttpGet]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet]
+        public IActionResult Get(int id)
         {
-            var item = await ApplicationContext.ConvertingOperations.FindAsync(id);
+            var item = _repository.GetOperation(id);
 
             if (item == null)
             {
                 return NotFound();
             }
-            return Ok(item);   
-        }*/
+            return Ok(item);
+        }
     }
 }

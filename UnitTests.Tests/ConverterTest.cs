@@ -9,16 +9,27 @@
 
 
 using RRJConverter.Services;
+using RRJConverter.Integrations.Services;
 using Xunit;
 
 namespace UnitTests.Tests
 {
     public class ConverterTest
     {
+        
+        public ConverterTest()
+        {
+            Ilogger
+        }
+
         [Fact]
         public void CorrectCountigTest()
         {
             //Arrange
+
+
+            var service = new JsonListOfCurrenciesService();
+
             var json = new JsonListOfValutesService();
             var result = json.GetListOfValutes();
             var converter = new ConverterService();

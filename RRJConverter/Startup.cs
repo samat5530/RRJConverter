@@ -29,7 +29,7 @@ namespace RRJConverter
             services.AddIntegrationServices();
             services.AddDatabaseServices(configuration);
             services.AddDomainServices();
-            //services.AddTransient<ExceptionHandlingMiddleware>();
+            services.AddTransient<ExceptionHandlingMiddleware>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,7 +40,7 @@ namespace RRJConverter
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseMiddleware<ExceptionHandlingMiddleware>();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 

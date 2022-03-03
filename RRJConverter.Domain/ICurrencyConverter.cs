@@ -1,12 +1,9 @@
 ﻿using RRJConverter.Domain.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RRJConverter.Domain
 {
-
     /// <summary>
     /// Сервис, выполяющий конвертацию валют
     /// </summary>

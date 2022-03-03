@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace RRJConverter.Domain
 {
-
     /// <summary>
     /// Сервис для получения валют из стороннего API
     /// </summary>
