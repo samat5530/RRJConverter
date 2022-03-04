@@ -1,19 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using RRJConverter.Models;
-using RRJConverter.Services;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
+using RRJConverter.Database.Services;
+using RRJConverter.Domain;
+using RRJConverter.Domain.Services;
+using RRJConverter.Integrations.Services;
+using RRJConverter.Middlewares;
+
 
 namespace RRJConverter
 {
@@ -21,17 +17,19 @@ namespace RRJConverter
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private readonly IConfiguration configuration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddTransient<JsonListOfValutesService>();
-            services.AddTransient<ConverterService>();
+            services.AddIntegrationServices();
+            services.AddDatabaseServices(configuration);
+            services.AddDomainServices();
+            services.AddTransient<ExceptionHandlingMiddleware>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,35 +40,16 @@ namespace RRJConverter
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+
             app.UseHttpsRedirection();
 
-            
-
             app.UseRouting();
-
-            app.MapWhen(context => {      
-                return !Decimal.TryParse(context.Request.Query["count"], NumberStyles.Any, CultureInfo.InvariantCulture, out _);
-            }, UncorrectURL);
-
-
-            
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-
-
-            static void UncorrectURL(IApplicationBuilder app)
-            {
-                app.Run(async context =>
-                {
-                    ErrorResponseModel errorResponse = new ErrorResponseModel();
-                    await context.Response.WriteAsync(errorResponse.GetErrorResponse("Error. Check given data"));
-                });
-            }
         }
     }
 }
