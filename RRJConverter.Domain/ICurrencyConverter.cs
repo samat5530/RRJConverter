@@ -24,6 +24,6 @@ namespace RRJConverter.Domain
         /// <param name="collection">Коллекция валют, в которой ведется поиск</param>
         /// <param name="currency">Искомая валюта</param>
         /// <returns>true, если валюта найдена, иначе false</returns>
-        public bool IsCurrencyExistInList(IEnumerable<DomainCurrenciesPairModel> collection, string currency);
+        public bool IsPairExistInList(IEnumerable<DomainCurrenciesPairModel> collection, string firstCurrency, string secondCurrency);
     }
 }

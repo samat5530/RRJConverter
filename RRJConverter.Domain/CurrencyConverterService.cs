@@ -30,7 +30,7 @@ namespace RRJConverter.Domain
                 throw new Exception("One or two of the arguments are bad");
             }
 
-            if (IsCurrencyExistInList(currencyCollection,firstCurrency) && IsCurrencyExistInList(currencyCollection,secondCurrency))
+            if (IsPairExistInList(currencyCollection,firstCurrency, secondCurrency))
             {
                 if (firstCurrency == secondCurrency)
                 {
@@ -49,15 +49,12 @@ namespace RRJConverter.Domain
         }
 
         /// <summary>
-        /// Проверка наличия валюты в коллекции IEnumerable, состоящей из объектов DomainCurrenciesPairModel
+        /// Проверка наличия пар валют в коллекции IEnumerable, состоящей из объектов DomainCurrenciesPairModel
         /// </summary>
-        /// <param name="collection">Коллекция IEnumerable, состоящей из объектов DomainCurrenciesPairModel</param>
-        /// <param name="currency">Строковый трёхбуквенный код валюты</param>
-        /// <returns></returns>
-        public bool IsCurrencyExistInList(IEnumerable<DomainCurrenciesPairModel> collection, string currency)
+        public bool IsPairExistInList(IEnumerable<DomainCurrenciesPairModel> collection, string firstCurrency, string secondCurrency)
         {
             var collectionOfPairs = collection.ToList();
-            bool checkingOperation = collectionOfPairs.Exists(pair => pair.SecondCurrency == currency);
+            bool checkingOperation = collectionOfPairs.Exists(pair => pair.SecondCurrency == secondCurrency && pair.FirstCurrency == firstCurrency);
             return checkingOperation;
         }
     }
