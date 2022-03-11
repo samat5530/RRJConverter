@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RRJConverter</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">RRJConverter</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/">Главная</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/info.html">Информация о проекте</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            <div class="text-center">
+                <br />
+                <br />
+                <br />
+                <h1>Конвертация валют</h1>
+                <br>
+                <table id="main-table" class="table table-condensed table-striped  col-md-6">
+                    <tr>
+                        <td><label>Введите количество</label></td>
+                        <th>
+                            <input id="fromCurrencyCount" type="text" name="fromCurrencyCount" />
+                        </th>
+                        <td>
+                            <select id="fromCurrency">
+                                <option value="AUD">Австралийский доллар</option>
+                                <option value="AZN">Азербайджанский манат</option>
+                                <option value="GBP">Фунт стерлингов Соединенного королевства</option>
+                                <option value="AMD">Армянских драмов</option>
+                                <option value="BYN">Белорусский рубль</option>
+                                <option value="BGN">Болгарский лев</option>
+                                <option value="BRL">Бразильский реал</option>
+                                <option value="HUF">Венгерских форинтов</option>
+                                <option value="HKD">Гонконгский доллар</option>
+                                <option value="DKK">Датская крона</option>
+                                <option value="USD">Доллар США</option>
+                                <option value="EUR">Евро</option>
+                                <option value="INR">Индийских рупий</option>
+                                <option value="KZT">Казахстанских тенге</option>
+                                <option value="CAD">Канадский доллар</option>
+                                <option value="KGS">Киргизских сомов</option>
+                                <option value="CNY">Китайский юань</option>
+                                <option value="MDL">Молдавских леев</option>
+                                <option value="NOK">Норвежская крона</option>
+                                <option value="PLN">Польский злотый</option>
+                                <option value="RON">Румынский лей</option>
+                                <option value="RUB">Российский рубль</option>
+                                <option value="XDR">СДР (специальные права заимствования)</option>
+                                <option value="SGD">Сингапурский доллар</option>
+                                <option value="TJS">Таджикских сомони</option>
+                                <option value="TRY">Турецких лир</option>
+                                <option value="TMT">Новый туркменский манат</option>
+                                <option value="UZS">Узбекских сумов</option>
+                                <option value="UAH">Украинских гривен</option>
+                                <option value="CZK">Чешских крон</option>
+                                <option value="SEK">Шведская крона</option>
+                                <option value="CHF">Швейцарский франк</option>
+                                <option value="ZAR">Южноафриканских рэндов</option>
+                                <option value="KRW">Вон Республики Корея</option>
+                                <option value="JPY">Японских иен</option>
+                            </select>
+                        </td>
+                        <td>=</td>
+                        <td id="toCurrencyCount">
+                        </td>
+                        <td>
+                            <select id="toCurrency">
+                                <option value="AUD">Австралийский доллар</option>
+                                <option value="AZN">Азербайджанский манат</option>
+                                <option value="GBP">Фунт стерлингов Соединенного королевства</option>
+                                <option value="AMD">Армянских драмов</option>
+                                <option value="BYN">Белорусский рубль</option>
+                                <option value="BGN">Болгарский лев</option>
+                                <option value="BRL">Бразильский реал</option>
+                                <option value="HUF">Венгерских форинтов</option>
+                                <option value="HKD">Гонконгский доллар</option>
+                                <option value="DKK">Датская крона</option>
+                                <option value="USD">Доллар США</option>
+                                <option value="EUR">Евро</option>
+                                <option value="INR">Индийских рупий</option>
+                                <option value="KZT">Казахстанских тенге</option>
+                                <option value="CAD">Канадский доллар</option>
+                                <option value="KGS">Киргизских сомов</option>
+                                <option value="CNY">Китайский юань</option>
+                                <option value="MDL">Молдавских леев</option>
+                                <option value="NOK">Норвежская крона</option>
+                                <option value="PLN">Польский злотый</option>
+                                <option value="RON">Румынский лей</option>
+                                <option value="RUB">Российский рубль</option>
+                                <option value="XDR">СДР (специальные права заимствования)</option>
+                                <option value="SGD">Сингапурский доллар</option>
+                                <option value="TJS">Таджикских сомони</option>
+                                <option value="TRY">Турецких лир</option>
+                                <option value="TMT">Новый туркменский манат</option>
+                                <option value="UZS">Узбекских сумов</option>
+                                <option value="UAH">Украинских гривен</option>
+                                <option value="CZK">Чешских крон</option>
+                                <option value="SEK">Шведская крона</option>
+                                <option value="CHF">Швейцарский франк</option>
+                                <option value="ZAR">Южноафриканских рэндов</option>
+                                <option value="KRW">Вон Республики Корея</option>
+                                <option value="JPY">Японских иен</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button onclick="Convert()" class="btn btn-primary">Конвертировать</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br />
+            <br />
+            <br />
+            <p style="color: gray; font-size: 13px" class="text-center"> Нажми на "Информация о проекте" в шапке, чтобы узнать побольше</p>
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; Gafiyatullin Samat aka RRJ - <a href="https://github.com/samat5530/">My github</a>
+        </div>
+    </footer>
+
+
+
+    <script>
+        // Получение данных
+        async function GetValue(fromCurrency, count, toCurrency) {
+            document.getElementById('toCurrencyCount').innerHTML = "...";
+            const response = await fetch('/api/Convert/?valute=' + fromCurrency + '&toValute=' + toCurrency + '&count=' + count, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                const responseJson = await response.json();
+                document.getElementById('toCurrencyCount').innerHTML = responseJson.result;
+            }
+            else
+                document.getElementById('toCurrencyCount').innerHTML = "Ошибка!";
+        }
+        async function Convert() {
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const fromCurrencyCount = document.getElementById('fromCurrencyCount').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+            await GetValue(fromCurrency, fromCurrencyCount, toCurrency);
+        }
+    </script>
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js"></script>
+</body>
+</html>

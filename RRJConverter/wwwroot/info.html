@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RRJConverter</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css" />
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">RRJConverter</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/">Главная</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/info.html">Информация о проекте</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            <div class="text-center">
+                <h3>Демонстрационный проект </h3>
+            </div>
+            <br />
+            <p>
+                Добрый день. Этот проект разрабатывался с целью предоставить демонстрацию опыта разработки WebApi ASP.NET Core <br />
+                Проект находится в открытом доступе на GitHub. <a href="https://github.com/samat5530/RRJConverter">Ссылка</a>.  <br />
+                На данный момент данный приложение работает со сторонним открытым api. Источник - <a href="https://www.cbr-xml-daily.ru/daily_json.js"> API</a>
+            </p>
+            <p>
+                Пример запросов на конвертацию: <a href="https://localhost:5001/api/Convert/?valute=RUB&toValute=USD&count=1">https://localhost:5001/api/Convert/?valute=RUB&toValute=USD&count=1</a>
+            </p>
+            <p> valute - конвертируемая валюта, count - количество конвертируемой валюты, toValute - валюта, в которую нужно выполнить конвертацию</p>
+            <p> Результатом данного запроса возвращается ответ в форме JSON-объекта</p>
+            <p>
+                Пример возврата: <br />
+                {<br />
+                "fromValute":"RUB", <br />
+                "count":1, <br />
+                "toValute":"USD",<br />
+                "result":0.0083, <br />
+                "convertationTime":"2022-03-11T01:15:56.2378252Z"} <br />
+                }
+            </p>
+            <p>
+                Помимо конвертации, приложение сохраняет операции конвертации в базу данных. Использовался SQL Server Local DB + Entity Framework Core.
+                Каждую операцию конвертацию можно получить по ID. При необходимости можно получать всех операций, удалять их т.е. выполнять все CRUD-операции.
+                Все из них определены в реализации интерфейса IRepository и при необходимости можно дополнить контроллер OperationsController всеми необходимыми CRUD методами.
+                Пример запроса <a href="https://localhost:5001/api/Operations/?id=1">https://localhost:5001/api/Operations/?id=1</a>
+                Написаны юнит-тесты для конкретной реализации конвертирования и конкретной реализации получения и парсинга валидного JSON-сэмпла.
+                Использован фреймворк Moq в тестах, написан global exception handler (ExceptionHandlingMiddleware в Startup.cs) для глобальной обработки исключений в простом масштабе (т.е. без типизированных исключений) и так далее.
+                <br />
+                Приложение на данном этапе разделено на 5 проектов: Domain, Integrations, Database, Web, Tests.
+                Центральным звеном является Domain, остальные слои зависят непосредственно от него. Являясь "дирижером" для проектов, он хранит интерфейсы и таким образом "задаёт форму обмена" данными для слоёв между собой.
+                Так реализована слабо-связность слоёв друг от друга. Каждый слой при необходимости можно переписать, например при смене поставщика данных (стороннего API): достаточно редактировать реализацию интерфейса домена
+                в проекте интеграции, так как конкретные реализации зарегистрированы как сервисы благодаря Dependency Injection.
+            </p>
+            <p>
+                Короткое отступление лично от себя - обо всех тонкостях разработки вспомнить в заключении уже стало довольно сложно. Очевиден факт - идеальных вещей не бывает и нет предела совершенству и человеку всегда есть куда расти.
+                <br />
+                Во время выполнения данного проекта мною было изучено много теоретического материала в области Asp.Net Core из множества открытых источников, были применены навыки, полученные
+                в ходе обучения в университете.<br />               
+            </p>
+            <p>
+                Огромную благодарность хочу выразить своему товарищу, другу и одногруппнику, опытному C#-middle разработчику <b>Габдулисламову Данилу</b>. Им были дан совет начать писать эту апишку и множество наставлений по изучению материалов. По его же рекомендациям
+                была изучена огромная полезность деления монолитного приложения на слои, по типу onion-архитектуры, и под его rewiev были исправлены некоторые ошибки. <i><b>"Спасибо тебе!!"</b></i>
+            </p>
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; Gafiyatullin Samat aka RRJ - <a href="https://github.com/samat5530/">My github</a>
+        </div>
+    </footer>
+
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js"></script>
+</body>
+</html>
